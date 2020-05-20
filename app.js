@@ -105,7 +105,8 @@ var UIController = (function() {
         budgetLabel: '.budget__value',
         incomeLabel: '.budget__income--value',
         expenseLabel: '.budget__expenses--value',
-        expensePercentageLabel: '.budget__expenses--percentage'
+        expensePercentageLabel: '.budget__expenses--percentage',
+        container: '.container'
     };
 
     return {
@@ -129,10 +130,10 @@ var UIController = (function() {
             var element;               // To store HTML element to manipulate
             if (type === 'inc') {
                 element = DOMStrings.incomeContainer;
-                html = '<div class="item clearfix" id="income-%id%"> <div class="item__description">%desc%</div> <div class="right clearfix"> <div class="item__value">%value%</div> <div class="item__delete"> <button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button> </div> </div> </div>'
+                html = '<div class="item clearfix" id="inc-%id%"> <div class="item__description">%desc%</div> <div class="right clearfix"> <div class="item__value">%value%</div> <div class="item__delete"> <button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button> </div> </div> </div>'
             } else if (type === 'exp') {
                 element = DOMStrings.expenseContainer;
-                html = '<div class="item clearfix" id="expense-%id%"> <div class="item__description">%desc%</div> <div class="right clearfix"> <div class="item__value">%value%</div> <div class="item__percentage">21%</div> <div class="item__delete"> <button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button> </div> </div> </div>'
+                html = '<div class="item clearfix" id="exp-%id%"> <div class="item__description">%desc%</div> <div class="right clearfix"> <div class="item__value">%value%</div> <div class="item__percentage">21%</div> <div class="item__delete"> <button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button> </div> </div> </div>'
             }
             
             // Modify string to include actual data
@@ -195,6 +196,11 @@ var controller = (function(budgetCtrl, UICtrl) {
                 ctrlAddItem();
             }
         });
+
+        // Adding remove functionality
+        // Add event handler to parent for event Delegation
+        document.querySelector(DOMStrings.container).addEventListener('click', ctrlDeleteItem);
+
     };
 
     var updateBudget = function() {
@@ -205,8 +211,9 @@ var controller = (function(budgetCtrl, UICtrl) {
         var budget = budgetCtrl.getBudget();
         // 3. Update the budget in UI
         UICtrl.refreshBudget(budget);
-    }
+    };
 
+    // Function to initiate item creation
     var ctrlAddItem = function() {
         // TODOS:
         // 1. Get input data from input fields
@@ -223,6 +230,21 @@ var controller = (function(budgetCtrl, UICtrl) {
         updateBudget();
         } else {
             alert('There should be an description.\nValue should be greater than 0.');
+        }
+        
+    };
+
+    // Function to initiate  item deletion
+    var ctrlDeleteItem = function(e) {
+        // Get the ID of the 4th parent node
+        var itemID = e.target.parentNode.parentNode.parentNode.parentNode.id;
+        var type, ID;
+        if (itemID) {
+            splitID = itemID.split('-');
+            type = splitID[0];
+            ID = parseInt(splitID[1]);
+            console.log(itemID, type, ID);
+            
         }
         
     };
