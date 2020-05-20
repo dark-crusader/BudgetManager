@@ -75,8 +75,8 @@ var UIController = (function() {
                 type: document.querySelector(DOMStrings.inputType).value,
             // returns description of the income/expense
                 description: document.querySelector(DOMStrings.inputDescription).value,
-            // returns the amount of income/expense
-                amount: parseInt(document.querySelector(DOMStrings.inputValue).value)
+            // returns the amount of income/expense as a float
+                amount: parseFloat(document.querySelector(DOMStrings.inputValue).value)
             }
         },
         // Method to add items
@@ -141,16 +141,31 @@ var controller = (function(budgetCtrl, UICtrl) {
         });
     };
 
+    var updateBudget = function() {
+        // TODOS:
+        // 1. Calculate new Budget
+        // 2. Update the budget in UI
+        // 3. Return updated budget
+    }
+
     var ctrlAddItem = function() {
         // TODOS:
         // 1. Get input data from input fields
         var input = UICtrl.getInput();
-        // 2. Update the budget
+
+        if (input.description !== '' && input.amount > 0 && !isNaN(input.amount)) {
+            // 2. Update the budget
         var newItem = budgetCtrl.addItem(input.type, input.description, input.amount);
         // 3. Update UI to display updated Item
         UICtrl.addListItem(newItem, input.type);
         // 4. Clear the fields on input
         UICtrl.clearFields();
+        //5. Calculate and update budget on UI
+        updateBudget();
+        } else {
+            alert('There should be an description.\nValue should be greater than 0.');
+        }
+        
     };
     
     return {
