@@ -61,7 +61,9 @@ var UIController = (function() {
         inputType: '.add__type',
         inputDescription: '.add__description',
         inputValue: '.add__value',
-        inputBtn: '.add__btn'
+        inputBtn: '.add__btn',
+        incomeContainer: '.income__list',
+        expenseContainer: '.expenses__list'
     };
 
     return {
@@ -76,6 +78,32 @@ var UIController = (function() {
             // returns the amount of income/expense
                 amount: parseInt(document.querySelector(DOMStrings.inputValue).value)
             }
+        },
+
+        addListItem: function(obj, type) {
+            // TODOS:
+            // Create a skeletral HTML string
+            var html = '';
+            var element;               // To store HTML element to manipulate
+            if (type === 'inc') {
+                element = DOMStrings.incomeContainer;
+                html = '<div class="item clearfix" id="income-%id%"> <div class="item__description">%desc%</div> <div class="right clearfix"> <div class="item__value">%value%</div> <div class="item__delete"> <button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button> </div> </div> </div>'
+            } else if (type === 'exp') {
+                element = DOMStrings.expenseContainer;
+                html = '<div class="item clearfix" id="expense-%id%"> <div class="item__description">%desc%</div> <div class="right clearfix"> <div class="item__value">%value%</div> <div class="item__percentage">21%</div> <div class="item__delete"> <button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button> </div> </div> </div>'
+            }
+            
+            // Modify string to include actual data
+            var placeholders = ['%id%', '%desc%', '%value%'];
+            var inputValue = [obj.id, obj.description, obj.value];
+
+            for(var i = 0; i < inputValue.length; i++) {
+                html = html.replace(placeholders[i], inputValue[i]);
+            }
+
+            // Insert the HTML string to DOM
+            document.querySelector(element).insertAdjacentHTML('beforeend', html);
+
         },
 
         // Getter for DOMString Object
@@ -110,6 +138,7 @@ var controller = (function(budgetCtrl, UICtrl) {
         // 2. Update the budget
         var newItem = budgetCtrl.addItem(input.type, input.description, input.amount);
         // 3. Update UI to display updated Item
+        UICtrl.addListItem(newItem, input.type);
         
 
     };
