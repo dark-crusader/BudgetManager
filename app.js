@@ -59,6 +59,23 @@ var budgetController = (function() {
             return newItem;
         },
 
+        // Function to remove element from data store
+        deleteItem: function(type, ID) {
+            
+            //Get ID's of all elements
+            var ids = data.allItems[type].map(ele => {
+                return ele.id;
+            });
+            
+            // Find the index of required ID
+            var index = ids.indexOf(ID);
+
+            // Remove the element at the index if found
+            if (index !== -1) {
+                data.allItems[type].splice(index, 1);
+            }
+        },
+
         calculateBudget: function() {
             // TODOS:
             // Calculate total income and epenses
@@ -144,7 +161,7 @@ var UIController = (function() {
                 html = html.replace(placeholders[i], inputValue[i]);
             }
 
-            // Insert the HTML string to DOM
+            // Insert the HTML string to DOM at the end of section
             document.querySelector(element).insertAdjacentHTML('beforeend', html);
 
         },
@@ -159,6 +176,7 @@ var UIController = (function() {
 
             fieldsArray[0].focus();
         },
+
         // Function to refresh budget
         refreshBudget: function(obj) {
             document.querySelector(DOMStrings.budgetLabel).textContent = obj.budget;
@@ -198,7 +216,7 @@ var controller = (function(budgetCtrl, UICtrl) {
         });
 
         // Adding remove functionality
-        // Add event handler to parent for event Delegation
+        // Add event handler to parent for event Delegation and handling
         document.querySelector(DOMStrings.container).addEventListener('click', ctrlDeleteItem);
 
     };
@@ -243,7 +261,9 @@ var controller = (function(budgetCtrl, UICtrl) {
             splitID = itemID.split('-');
             type = splitID[0];
             ID = parseInt(splitID[1]);
-            console.log(itemID, type, ID);
+            // Delete item form data store
+            budgetCtrl.deleteItem(type, ID);
+            // Delete item form UI
             
         }
         
