@@ -79,7 +79,7 @@ var UIController = (function() {
                 amount: parseInt(document.querySelector(DOMStrings.inputValue).value)
             }
         },
-
+        // Method to add items
         addListItem: function(obj, type) {
             // TODOS:
             // Create a skeletral HTML string
@@ -105,7 +105,17 @@ var UIController = (function() {
             document.querySelector(element).insertAdjacentHTML('beforeend', html);
 
         },
+        // Method to clear input fields
+        clearFields: function() {
+            var fields = document.querySelectorAll(DOMStrings.inputDescription + ', ' + DOMStrings.inputValue);
 
+            var fieldsArray = Array.prototype.slice.call(fields);
+            fieldsArray.forEach(ele => {
+                ele.value = '';
+            });
+
+            fieldsArray[0].focus();
+        },
         // Getter for DOMString Object
         getDOMString: function() {
             return DOMStrings;
@@ -139,8 +149,8 @@ var controller = (function(budgetCtrl, UICtrl) {
         var newItem = budgetCtrl.addItem(input.type, input.description, input.amount);
         // 3. Update UI to display updated Item
         UICtrl.addListItem(newItem, input.type);
-        
-
+        // 4. Clear the fields on input
+        UICtrl.clearFields();
     };
     
     return {
@@ -153,5 +163,5 @@ var controller = (function(budgetCtrl, UICtrl) {
 
 })(budgetController, UIController);
 
-
+// Initialize the app
 controller.init();
