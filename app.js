@@ -15,7 +15,41 @@ var budgetController = (function() {
         this.description = description;
         this.value = value;
     };
+
+    var data = {
+        allItems: {
+            exp: [],
+            inc: []
+        },
+        totals: {
+            exp: 0,
+            inc: 0
+        }
+    };
+
+    return {
+        addItem: function(type, description, value) {
+            var newItem, ID;
+            // Next ID is 1 + previous ID is type Array if elements exist
+            if (data.allItems[type].length > 0) {
+                ID = data.allItems[type][data.allItems[type].length - 1].id + 1;
+            } else {
+                ID = 0;
+            }
+            
+            // Create Object Based on the type of input
+            if (type === 'exp') {
+                newItem = new Expense(ID, description, value);
+            } else if(type === 'inc') {
+                newItem = new Income(ID, description, value);
+            }
+            // Push the newly created item to the array of its category 
+            data.allItems[type].push(newItem);
+            // Return the new element
+            return newItem;
+        }
     
+    };
 
 })();
 
@@ -43,6 +77,7 @@ var UIController = (function() {
                 amount: parseInt(document.querySelector(DOMStrings.inputValue).value)
             }
         },
+
         // Getter for DOMString Object
         getDOMString: function() {
             return DOMStrings;
@@ -72,9 +107,9 @@ var controller = (function(budgetCtrl, UICtrl) {
         // TODOS:
         // 1. Get input data from input fields
         var input = UICtrl.getInput();
-        
         // 2. Update the budget
-        // 3. Update UI to display updated budget
+        var newItem = budgetCtrl.addItem(input.type, input.description, input.amount);
+        // 3. Update UI to display updated Item
         
 
     };
