@@ -149,7 +149,8 @@ var UIController = (function() {
         expenseLabel: '.budget__expenses--value',
         expensePercentageLabel: '.budget__expenses--percentage',
         container: '.container',
-        expPer: '.item__percentage'
+        expPer: '.item__percentage',
+        dateLabel: '.budget__title--month'
     };
 
     // Formats numbers for display
@@ -162,6 +163,20 @@ var UIController = (function() {
         int = int.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         return sign + int + '.' + dec;
     }
+
+    // Function to return current month and year
+    var getDate = function() {
+
+        months = ['January', 'February', 'March',
+                    'April', 'May', 'June',
+                    'July', 'August', 'September',
+                    'October', 'November', 'December'];
+        // Get current date
+        var currDate = new Date();
+        var year = months[currDate.getMonth()];
+        year += ' ' + currDate.getFullYear();
+        return year;
+    };
 
     return {
 
@@ -223,7 +238,7 @@ var UIController = (function() {
             fieldsArray[0].focus();
         },
 
-        // Function to refresh budget
+        // Function to refresh Budget Panel
         refreshBudget: function(obj) {
             document.querySelector(DOMStrings.budgetLabel).textContent = formatNumber(
                     Math.abs(obj.budget), 
@@ -237,7 +252,9 @@ var UIController = (function() {
             } else {
                 document.querySelector(DOMStrings.expensePercentageLabel).textContent = '-';
             }
-        
+
+            // Update Month and Year
+            document.querySelector(DOMStrings.dateLabel).textContent = getDate();
         },
 
         // Refreshes the precentages in UI
