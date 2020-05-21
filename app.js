@@ -272,6 +272,25 @@ var UIController = (function() {
 
         },
 
+        changeType: function() {
+
+            var toggle = (ele, style) => {
+                ele.classList.toggle(style);
+            };
+
+            var fields = document.querySelectorAll(
+                DOMStrings.inputType + ',' +
+                DOMStrings.inputDescription + ',' +
+                DOMStrings.inputValue
+            );
+
+            fields.forEach(ele => {
+                toggle(ele, 'red-focus');
+            });
+
+            toggle(document.querySelector(DOMStrings.inputBtn), 'red');
+        },
+
         // Getter for DOMString Object
         getDOMString: function() {
             return DOMStrings;
@@ -295,11 +314,11 @@ var controller = (function(budgetCtrl, UICtrl) {
                 ctrlAddItem();
             }
         });
-
         // Adding remove functionality
         // Add event handler to parent for event Delegation and handling
         document.querySelector(DOMStrings.container).addEventListener('click', ctrlDeleteItem);
-
+        // Add change event on add__type to change UI on type change
+        document.querySelector('.add__type').addEventListener('change', UICtrl.changeType);
     };
 
     var updateBudget = function() {
